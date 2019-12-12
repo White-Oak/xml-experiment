@@ -1,0 +1,7 @@
+sink            58477742
+local           2517220968   = 2.5 sec
+tmp             1526768307   = 1.5 sec
+local zip       334969600    = 0.33 sec
+tmp zip         333697330    = 0.33 sec
+tmp zip bzip2   2665176235
+local zip bzip2 2722540908

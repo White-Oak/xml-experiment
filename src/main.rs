@@ -1,21 +1,22 @@
-extern crate quick_xml;
+use quick_xml::events::Event;
+use quick_xml::{Reader, Writer};
+use zip::ZipWriter;
+
+use std::fs::File;
 
 fn main() {
-    use quick_xml::events::Event;
-    use quick_xml::{Reader, Writer};
-    use std::fs::File;
-
     let mut reader = Reader::from_file("0.xml").unwrap();
 
-    // let write = File::create("foo.xml").unwrap();
-    let write = std::io::sink();
-    let mut writer = Writer::new_with_indent(write, b' ', 2);
+    let write = File::create("/tmp/foo.xml").unwrap();
+    let mut zip = ZipWriter::new(write);
+    let options = zip::write::FileOptions::default().compression_method(zip::CompressionMethod::Deflated);
+    zip.start_file("0.xml", options).unwrap();
+    let mut writer = Writer::new_with_indent(zip, b' ', 2);
 
     reader.trim_text(true);
 
     let mut buf = Vec::new();
     let mut in_offer = false;
-    //let mut txt = Vec::new();
     let now = std::time::Instant::now();
     let mut attempts = 0;
 
