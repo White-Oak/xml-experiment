@@ -7,3 +7,4 @@ edition = "2018"
 [dependencies]
 quick-xml = "*"
 zip = "*"
+flate2 = "*"

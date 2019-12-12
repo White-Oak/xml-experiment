@@ -1,17 +1,26 @@
 use quick_xml::events::Event;
 use quick_xml::{Reader, Writer};
 use zip::ZipWriter;
+use flate2::*;
 
 use std::fs::File;
 
 fn main() {
     let mut reader = Reader::from_file("0.xml").unwrap();
 
-    let write = File::create("/tmp/foo.xml").unwrap();
-    let mut zip = ZipWriter::new(write);
-    let options = zip::write::FileOptions::default().compression_method(zip::CompressionMethod::Deflated);
-    zip.start_file("0.xml", options).unwrap();
-    let mut writer = Writer::new_with_indent(zip, b' ', 2);
+    // let write = File::create("/tmp/foo.xml").unwrap();
+
+    // let mut zip = ZipWriter::new(write);
+    // let options = zip::write::FileOptions::default().compression_method(zip::CompressionMethod::Deflated);
+    // zip.start_file("0.xml", options).unwrap();
+    // let mut writer = Writer::new_with_indent(zip, b' ', 2);
+
+
+    let f = File::create("./foo.gz").unwrap();
+    let gz = GzBuilder::new()
+        .filename("0.xml")
+        .write(f, Compression::default());
+    let mut writer = Writer::new_with_indent(gz, b' ', 2);
 
     reader.trim_text(true);
 
